@@ -3,6 +3,8 @@ const { ApolloServer } = require("apollo-server")
 const typeDefs = require("./schema")
 const GithubApiCommits = require("./datasources/GithubApi")
 
+const APIS = require("./apiObject")
+
 const resolvers = require("./resolvers")
 const port = process.env.port || 9000
 const server = new ApolloServer({

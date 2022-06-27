@@ -24,8 +24,6 @@ type Query{
 }
 
 type CommitConnection {
-    cursor: String!
-    hasMore:Boolean!
     Commits:[Commits]
     
 }
