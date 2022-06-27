@@ -2,31 +2,33 @@ const { gql } = require("apollo-server")
 
 const typeDefs = gql`
 
+
 type Commits{
     sha: String!
-    message: String!
     html_url:String!
-    commit: Committer!
-    hasAuthor:[Author]!
-
-}
-
-type Committer{
-    message:String!
-    author:Author!
-
-
-}
-type Author{
-    name: String!
+    author: String!
     date: String!
+    message:String!
 
 }
+
+
+
 
 type Query{
-    Commits: [Commits]
+    Commits(
+        pageSize: Int
+       
+        after: String
+      ): CommitConnection!
 }
 
+type CommitConnection {
+    cursor: String!
+    hasMore:Boolean!
+    Commits:[Commits]
+    
+}
  
 `
  
