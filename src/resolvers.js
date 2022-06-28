@@ -53,7 +53,13 @@ module.exports = {
   },
   Mutation:{
     generateNewApiKey: async (_, {api}, context) => {
-      // console.log(api)
+      if(api==null){
+        const genRand = (len) => {
+          return Math.random().toString(36).substring(2,len+2);
+        }
+        
+        api =genRand(12);
+      }
       try{
         await context.dataSources.authAPI.addApis(api);
         // console.log(context.dataSources.authAPI.getApis())
@@ -64,9 +70,7 @@ module.exports = {
     }
 
 }
-
-  // {
-    
-    
+      
 
   }
+ 
