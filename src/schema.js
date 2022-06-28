@@ -12,21 +12,30 @@ type Commits{
 
 }
 
-
-
-
 type Query{
-    Commits(
+    GetCommits(
         pageSize: Int
        
         after: String
       ): CommitConnection!
+
+      hello: String
 }
 
 type CommitConnection {
     Commits:[Commits]
     
 }
+
+type Api{
+    api: String
+}
+
+type Mutation{
+    generateNewApiKey(api:String):Api
+}
+
+
  
 `
  

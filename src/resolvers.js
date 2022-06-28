@@ -1,20 +1,30 @@
 const {paginateResults} = require('./utils');
-const { AuthenticationError } = require("apollo-server")
+const { AuthenticationError, Error } = require("apollo-server")
 
 
 module.exports = {
  
     Query: {
-        Commits: async (_, {pageSize = 5, after}, context) => {
-          const api = await context.dataSources.authAPI.createApis();  
-         
-          // check of validity of API KEY
-          if(context.token !== api.api) return new AuthenticationError('Your Authorization API KEY is invalid');
+        GetCommits: async (_, {pageSize = 5, after}, context) => {
 
+          const token = context.token;
+          const api = await context.dataSources.authAPI.getApis();  
+         
+          // check validity of API KEY
+        
+          if(api){
+           
+            const apiObject = api.find(key => key.api === token );
+          
+              if(apiObject==undefined){
+                throw new AuthenticationError('Your Authorization API KEY is invalid')
+              }
+                };
 
           const allCommits = await context.dataSources.GithubApi.getCommitsFromGithubApi();
           // we want these in reverse chronological order
           allCommits.reverse();
+          // console.log(api)
     
           const Commits = paginateResults({
             after,
@@ -31,7 +41,32 @@ module.exports = {
               allCommits[allCommits.length - 1].cursor
             : false
         };
+    },
+
+    // hello word function
+      hello: () => {
+          return 'Hello World!';
+      },
+
+      
+
+  },
+  Mutation:{
+    generateNewApiKey: async (_, {api}, context) => {
+      // console.log(api)
+      try{
+        await context.dataSources.authAPI.addApis(api);
+        // console.log(context.dataSources.authAPI.getApis())
+        return {"api":api};
+      }catch(err){
+        return (err);
+      }
     }
+
 }
+
+  // {
+    
+    
 
   }

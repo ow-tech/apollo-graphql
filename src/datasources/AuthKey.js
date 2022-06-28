@@ -23,12 +23,25 @@ class AuthKey extends DataSource {
     
   }
 
- 
-
   async createApis(){
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
    
-    return await APIKEY.create({"api":'alex'});
+    await APIKEY.bulkCreate([{"api":'alex'},{"api":"barasa"}]);
+    return await APIKEY.findAll();
+
+  }
+
+  async addApis(api){
+    // await sequelize.sync();
+   console.log(api)
+    await APIKEY.create({"api":`${api}`});
+    return await APIKEY.findAll();
+
+  }
+
+  async getApis(){
+    // await sequelize.sync();
+    return await APIKEY.findAll();
 
   }
 

@@ -1,5 +1,5 @@
 require("dotenv").config()
-const { ApolloServer, AuthenticationError } = require("apollo-server")
+const { ApolloServer} = require("apollo-server")
 const typeDefs = require("./schema")
 const GithubApiCommits = require("./datasources/GithubApi")
 
@@ -13,7 +13,10 @@ const resolvers = require("./resolvers")
 const port = process.env.port || 9000
 
 
-
+const createTable = async () => {
+  new AuthAPI().createApis()
+}
+createTable()
 const server = new ApolloServer({
 
   
@@ -26,10 +29,10 @@ const server = new ApolloServer({
   
     // optionally block the request
   
-    if (!token || token.length==0) throw new AuthenticationError('you must have Authorization API KEY');
+   
   
     // add the token to the context
-    return { token};
+    return {token};
   },
 
   dataSources: () => ({
