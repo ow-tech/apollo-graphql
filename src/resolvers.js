@@ -1,17 +1,18 @@
 const {paginateResults} = require('./utils');
+const { AuthenticationError } = require("apollo-server")
 
 
 module.exports = {
-   
-    // Query: {
-    //     Commits: (_, __,{ dataSources }) => {
-    //         return dataSources.GithubApi.getTracksForHome()
-    //     }
-    // }
-
+ 
     Query: {
-        Commits: async (_, {pageSize = 5, after}, {dataSources}) => {
-          const allCommits = await dataSources.GithubApi.getCommitsFromGithubApi();
+        Commits: async (_, {pageSize = 5, after}, context) => {
+          const api = await context.dataSources.authAPI.createApis();  
+         
+          // check of validity of API KEY
+          if(context.token !== api.api) return new AuthenticationError('Your Authorization API KEY is invalid');
+
+
+          const allCommits = await context.dataSources.GithubApi.getCommitsFromGithubApi();
           // we want these in reverse chronological order
           allCommits.reverse();
     
